@@ -1,20 +1,17 @@
-# Use the official Node.js image as the base image
 FROM node:20
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# COPY only what’s needed to calculate the layer’s cache
+COPY package.json package-lock.json ./
 
-# Install dependencies
+# During active development you usually want dev‑deps too,
+# so use `npm install` instead of `npm ci --omit=prod`
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Now copy the actual source
 COPY . .
 
-# Expose the port the app runs on
-EXPOSE 5173
-
-# Command to run the application
-CMD ["npm", "run", "dev"]
+# Make Vite listen on all interfaces so you can hit it from the host
+ENV PORT=5173
+CMD [ "npm", "run", "dev", "--", "--host" ]
