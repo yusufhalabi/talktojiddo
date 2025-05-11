@@ -11,6 +11,9 @@ export const createConversation = async (): Promise<IConversation> => {
       },
       body: JSON.stringify({
         persona_id: "p9a95912", // Stock Demo Persona
+        properties: {
+          language: "arabic",
+        },
       }),
     });
 
